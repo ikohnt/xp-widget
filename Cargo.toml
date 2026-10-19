@@ -1,0 +1,48 @@
+[package]
+name = "xp-widget"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+# ApplicationHandler pattern, disabled defaults to reduce bloat
+winit = { version = "0.30", default-features = false, features = ["rwh_06"] }
+# CPU rendering backend for winit
+softbuffer = "0.4.6"
+# CPU 2D rendering for the XP chrome and compositing
+tiny-skia = "0.11.4"
+# Loading images. Disabled default features to avoid bloat (like pulling in unnecessary formats or networking)
+image = { version = "0.24", default-features = false, features = ["png", "jpeg", "gif"] }
+# Configuration parsing
+serde = { version = "1.0", features = ["derive"] }
+toml = "0.8"
+# Finding %APPDATA%
+dirs = "5.0"
+# Rendering text for the title bar and placeholders
+fontdue = "0.9"
+# Interacting with Windows APIs (WorkerW, IPC, styles)
+windows-sys = { version = "0.52", features = [
+    "Win32_Foundation",
+    "Win32_UI_WindowsAndMessaging",
+    "Win32_System_Threading",
+    "Win32_Graphics_Gdi",
+    "Win32_Storage_FileSystem",
+    "Win32_Graphics_Dwm",
+] }
+tray-icon = "0.26.0"
+muda = "0.21.0"
+rfd = "0.17.2"
+auto-launch = "0.6.0"
+accesskit = "0.25.1"
+accesskit_winit = "0.34.1"
+native-windows-gui = "1.0.13"
+native-windows-derive = "1.0.5"
+
+[build-dependencies]
+winres = "0.1.12"
+
+[profile.release]
+lto = true
+codegen-units = 1
+panic = "abort"
+strip = true
+opt-level = "s" # optimize for size, as the CPU rendering logic is not too heavy and we want a lightweight binary
